@@ -22,8 +22,8 @@ RUN git clone --recurse-submodules -j8 https://github.com/google/ngx_brotli
 RUN wget https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz
 RUN tar zxvf nginx-${NGINX_VERSION}.tar.gz
 WORKDIR nginx-${NGINX_VERSION}
-RUN ./configure --with-compat --add-dynamic-module=../ngx_brotli && \
-    make modules
+RUN ./configure --with-compat --add-dynamic-module=../ngx_brotli \ 
+    && make modules
 
 FROM nginx:${NGINX_VERSION} as final
 COPY --from=builder /opt/build-stage/nginx-${NGINX_VERSION}/objs/ngx_http_brotli_static_module.so /usr/lib/nginx/modules/
