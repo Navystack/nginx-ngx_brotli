@@ -13,7 +13,12 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         zlib1g-dev \
         libpcre3 \
         libpcre3-dev \
-        unzip uuid-dev && \
+        unzip uuid-dev \
+
+        openssl \
+        libssl-dev \
+        libbrotli-dev && \
+        
     mkdir -p /opt/build-stage
 
 WORKDIR /opt/build-stage
