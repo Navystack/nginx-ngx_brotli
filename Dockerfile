@@ -18,14 +18,9 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 
 WORKDIR /opt/build-stage
 
-RUN git clone https://github.com/google/ngx_brotli.git && \
-    cd ngx_brotli && \
-    git checkout a71f9312c2deb28875acc7bacfdd5695a111aa53
-
+RUN git clone --recurse-submodules -j8 https://github.com/google/ngx_brotli
 RUN wget https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz
 RUN tar zxvf nginx-${NGINX_VERSION}.tar.gz
-RUN export CFLAGS="-m64 -march=native -mtune=native -Ofast -flto -funroll-loops -ffunction-sections -fdata-sections -Wl,--gc-sections"
-RUN export LDFLAGS="-m64 -Wl,-s -Wl,-Bsymbolic -Wl,--gc-sections"
 WORKDIR nginx-${NGINX_VERSION}
 RUN ./configure --with-compat --add-dynamic-module=../ngx_brotli && \
     make modules
