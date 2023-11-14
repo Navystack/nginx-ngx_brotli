@@ -18,15 +18,16 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 
 WORKDIR /opt/build-stage
 
-RUN git clone https://github.com/nginx-modules/ngx_immutable.git && \
-    cd ngx_immutable && \
-    git checkout dab3852a2c8f6782791664b92403dd032e77c1cb
+RUN git clone https://github.com/google/ngx_brotli.git && \
+    cd ngx_brotli && \
+    git checkout a71f9312c2deb28875acc7bacfdd5695a111aa53
 
 RUN wget https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz
 RUN tar zxvf nginx-${NGINX_VERSION}.tar.gz
 WORKDIR nginx-${NGINX_VERSION}
-RUN ./configure --with-compat --add-dynamic-module=../ngx_immutable/ && \
+RUN ./configure --with-compat --add-dynamic-module=../ngx_brotli/ && \
     make modules
 
 FROM nginx:${NGINX_VERSION} as final
-COPY --from=builder /opt/build-stage/nginx-${NGINX_VERSION}/objs/ngx_http_immutable_module.so /usr/lib/nginx/modules/
+COPY --from=builder /opt/build-stage/nginx-${NGINX_VERSION}/objs/ngx_http_brotli_static_module.so /usr/lib/nginx/modules/
+COPY --from=builder /opt/build-stage/nginx-${NGINX_VERSION}/objs/ngx_http_brotli_filter_module.so /usr/lib/nginx/modules/
