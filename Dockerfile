@@ -27,7 +27,7 @@ RUN tar zxvf nginx-${NGINX_VERSION}.tar.gz
 RUN export CFLAGS="-m64 -march=native -mtune=native -Ofast -flto -funroll-loops -ffunction-sections -fdata-sections -Wl,--gc-sections"
 RUN export LDFLAGS="-m64 -Wl,-s -Wl,-Bsymbolic -Wl,--gc-sections"
 WORKDIR nginx-${NGINX_VERSION}
-RUN ./configure --with-compat --add-dynamic-module=../ngx_brotli/ && \
+RUN ./configure --with-compat --add-dynamic-module=../ngx_brotli && \
     make modules
 
 FROM nginx:${NGINX_VERSION} as final
